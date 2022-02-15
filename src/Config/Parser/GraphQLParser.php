@@ -65,6 +65,8 @@ class GraphQLParser implements ParserInterface
                  */
                 $class = sprintf('\\%s\\GraphQL\\ASTConverter\\%sNode', __NAMESPACE__, ucfirst(self::DEFINITION_TYPE_MAPPING[$typeDef->kind]));
                 $typesConfig[$typeDef->name->value] = call_user_func([$class, 'toConfig'], $typeDef);
+            } else if (isset($typeDef->kind) && $typeDef->kind == NodeKind::DIRECTIVE_DEFINITION && isset($typeDef->name) && $typeDef->name->value === 'resolve') {
+                // Allow a directive named resolve
             } else {
                 self::throwUnsupportedDefinitionNode($typeDef);
             }
